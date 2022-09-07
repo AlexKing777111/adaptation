@@ -1,18 +1,5 @@
 # Практическое задание №1
 
-Клонируйте репозиторий
-```
-    git@github.com:AlexKing777111/adaptation.git
-```
-Создать и активировать виртуальное окружение
-```
-    python -m venv venv
-    source venv/Scripts/activate
-```
-Установить pytest
-```
-    pip install pytest
-```
 ### Первая часть задания находится в файле **oop.py**
 
 Для запуска тестов введите
