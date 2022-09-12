@@ -19,17 +19,30 @@ class IntervalThread(threading.Thread):
         self.interval = interval
 
     def run(self):
-        while True:
-            print(
-                f"---Поток {threading.currentThread().name} начал работу.---"
-            )
-            time.sleep(randint(1, 10))
-            print(
-                f"---Поток {threading.currentThread().name} закончил работу.---"
-            )
-            time.sleep(self.interval)
+        print(f"---Поток {threading.currentThread().name} начал работу.---")
+        time.sleep(randint(1, 10))
+        print(f"---Поток {threading.currentThread().name} закончил работу.---")
+
+
+def thr1_starter(interval, name):
+    thr1 = IntervalThread(interval=interval, name=name)
+    time.sleep(interval)
+    thr1.start()
+    return thr1
+
+
+def thr2_starter(interval, name):
+    thr2 = IntervalThread(interval=interval, name=name)
+    time.sleep(interval)
+    thr2.start()
+    return thr2
 
 
 if __name__ == "__main__":
-    IntervalThread(interval=10).start()
-    IntervalThread(name="Ivan").start()
+    thr1 = thr1_starter(interval=0, name="Gena")
+    thr2 = thr2_starter(interval=0, name="artur")
+    while True:
+        if not thr1.is_alive():
+            thr1 = thr1_starter(interval=10, name="Gena")
+        elif not thr2.is_alive():
+            thr2 = thr2_starter(interval=1, name="artur")
