@@ -40,9 +40,7 @@ if __name__ == "__main__":
         event.wait()
         if not thr1.is_alive():
             thr1 = IntervalThread(1, work_imitation, name="first")
-            print(event.is_set())
             thr1.start()
-            print(event.is_set())
         elif not thr2.is_alive():
             thr2 = IntervalThread(3, work_imitation, name="second")
             thr2.start()
