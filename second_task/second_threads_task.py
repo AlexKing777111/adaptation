@@ -4,54 +4,54 @@ from datetime import datetime
 from random import randint
 
 
-class IntervalThread(threading.Thread):
-    def __init__(
-        self,
-        name=None,
-        group=None,
-        target=None,
-        args=(),
-        kwargs=None,
-        *,
-        daemon=None,
-        interval=2,
-    ):
-        super().__init__(group, target, name, args, kwargs, daemon=daemon)
-        self.interval = interval
+class IntervalThread(threading.Timer):
+    def __init__(self, interval, function, name=None, args=[], kwargs=None):
+        super().__init__(interval, function, args, kwargs)
+        self.name = name
 
 
 def work_imitation():
     event.clear()
     print(
         f"---Поток {threading.currentThread().name} "
-        f"начал работу в {datetime.now()}.---"
+        f"начал работу в {datetime.now().strftime('%H:%M:%S')}---"
     )
     time.sleep(randint(1, 10))
     print(
         f"---Поток {threading.currentThread().name} "
-        f"закончил работу в {datetime.now()}.---"
-    )
-    thr_reset(
-        name=threading.currentThread().name,
-        interval=threading.currentThread().interval,
-        target=work_imitation,
+        f"закончил работу в {datetime.now().strftime('%H:%M:%S')}---"
     )
     event.set()
-
-
-def thr_reset(interval, target, name=None):
-    event.clear()
-    time.sleep(interval)
-    IntervalThread(name=name, interval=interval, target=target).start()
 
 
 if __name__ == "__main__":
     event = threading.Event()
-    event.set()
-    IntervalThread(
-        name="10 second", interval=10, target=work_imitation
-    ).start()
-    IntervalThread(name="7 second", interval=7, target=work_imitation).start()
-    IntervalThread(name="5 second", interval=5, target=work_imitation).start()
-    IntervalThread(name="3 second", interval=3, target=work_imitation).start()
-    IntervalThread(name="1 second", interval=1, target=work_imitation).start()
+    thr1 = threading.Thread(target=work_imitation, name="first")
+    thr1.start()
+    thr2 = threading.Thread(target=work_imitation, name="second")
+    thr2.start()
+    thr3 = threading.Thread(target=work_imitation, name="third")
+    thr3.start()
+    thr4 = threading.Thread(target=work_imitation, name="fourth")
+    thr4.start()
+    thr5 = threading.Thread(target=work_imitation, name="fifth")
+    thr5.start()
+    while True:
+        event.wait()
+        if not thr1.is_alive():
+            thr1 = IntervalThread(1, work_imitation, name="first")
+            print(event.is_set())
+            thr1.start()
+            print(event.is_set())
+        elif not thr2.is_alive():
+            thr2 = IntervalThread(3, work_imitation, name="second")
+            thr2.start()
+        elif not thr3.is_alive():
+            thr3 = IntervalThread(5, work_imitation, name="third")
+            thr3.start()
+        elif not thr4.is_alive():
+            thr4 = IntervalThread(7, work_imitation, name="fourth")
+            thr4.start()
+        elif not thr5.is_alive():
+            thr5 = IntervalThread(10, work_imitation, name="fifth")
+            thr5.start()
